@@ -3,7 +3,7 @@ const config = require('./conf');
 const pool = mysql.createPool(config);
 
 async function query(sql, params) {
-  const [rows, fields] = await pool.execute(sql, params);
+  const [rows, _] = await pool.execute(sql, params);
   return rows;
 }
 

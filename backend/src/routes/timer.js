@@ -5,10 +5,10 @@ const router = express.Router();
 
 const MAIN_TABLE = process.env.MYSQL_MAIN_TABLE;
 
-router.get('/', async (req, res) => {
+router.get('/', async (_, res) => {
   try {
-    const result = await query(`SELECT id, creationDate, rest, work, sets, totalTime FROM ${MAIN_TABLE}`);
-    res.json(result);
+    const result = await query(`SELECT creationDate, rest, work, sets, totalTime, name FROM ${MAIN_TABLE}`);
+    res.json({result});
   } catch (err) {
     console.error(err.message);
   }
@@ -21,21 +21,42 @@ router.post('/create', async (req, res) => {
       `INSERT INTO ${MAIN_TABLE} (rest, sets, work, creationDate, totalTime, name) VALUES (?, ?, ?, ?, ?, ?)`, 
       [element.rest, element.sets, element.work, new Date(), element.totalTime, element.name]
     );
-
-    if (result.affectedRows) {
-      res.json({...result});
-    }
+    res.json({affectedRows : result.affectedRows});
   } catch (err) {
     res.json({error:err.message, affectedRows : 0});
   }
 });
 
-router.put('/modify', (req, res) => {
-
+router.put('/modify', async (req, res) => {
+  try {
+    const updatedElement = req.body.timer;
+    const result = await query(
+      `UPDATE ${MAIN_TABLE} 
+       SET sets = ${updatedElement.sets},
+        rest = ${updatedElement.rest},
+        work = ${updatedElement.work},
+        totalTime = ${updatedElement.totalTime}
+        WHERE
+        name = '${updatedElement.name}' 
+      `
+    );
+    res.json({affectedRows : result.affectedRows});
+  } catch (err) {
+    res.json({error:err.message, affectedRows : 0});
+  }
 });
 
-router.delete('/delete', (req, res) => {
+router.delete('/delete', async (req, res) => {
+  try {
+    const name = req.body.name;
+    const result = await query(
+      `DELETE FROM ${MAIN_TABLE} WHERE name = '${name}'`
+    );
 
+    res.json({affectedRows : result.affectedRows});
+  } catch (err) {
+    res.json({error:err.message, affectedRows : 0});
+  }
 });
 
 module.exports = router;
