@@ -16,7 +16,7 @@ router.get('/get', async (_, res) => {
 
 router.post('/create', async (req, res) => {
   try {
-    const element = req.body.timer;
+    const element = req.body.data.timer;
     const result = await query(
       `INSERT INTO ${MAIN_TABLE} (rest, sets, work, creationDate, totalTime, name) VALUES (?, ?, ?, ?, ?, ?)`, 
       [element.rest, element.sets, element.work, new Date(), element.totalTime, element.name]
