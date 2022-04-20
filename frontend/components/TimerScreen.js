@@ -1,9 +1,13 @@
 import * as React from "react";
 
+import Toast from 'react-native-toast-message';
 import InputSpinner from "react-native-input-spinner";
+import Prompt from 'react-native-prompt-crossplatform';
 import { Button, StyleSheet, Text, View } from "react-native";
 import { calculateTotalTime, showTimer } from "../utils";
 import { TimerContext } from "../memo/TimerMemo";
+import { TimerStore } from "../store/TimerStore";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const timerSettings = {
   SETS: {
@@ -44,22 +48,35 @@ export default function TimerScreen() {
 
   const [mode, setMode] = React.useState(MODES.CREATE);
 
-  const [reps, setReps] = React.useState(timerSettings.SETS.sample);
+  const [sets, setSets] = React.useState(timerSettings.SETS.sample);
   const [rest, setRest] = React.useState(timerSettings.REST.sample);
   const [work, setWork] = React.useState(timerSettings.WORK.sample);
 
   const [totalTime, setTotalTime] = React.useState(0);
+  const [name, setName] = React.useState('');
+  const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
   React.useEffect(() => {
-    setTotalTime(calculateTotalTime(work, reps, rest));
+    setTotalTime(calculateTotalTime(work, sets, rest));
   })
 
   const handleChange = (newValue, value, setState) => {
     setState(Number.isInteger(newValue) ? newValue : value);
-    setTotalTime(calculateTotalTime(work, reps, rest));
+    setTotalTime(calculateTotalTime(work, sets, rest));
   };
 
-  const handleSave = (e) => {}
+  const handleSave = (timer) => {
+    TimerStore.create(timerContext, timer).then(({data}) => {
+      console.log(data);
+      const element = timer;
+      const succesful = data.affectedRows && data.affectedRows > 0;
+      Toast.show({
+        type: succesful ? 'success' : 'error',
+        text1: 'Action message :D',
+        text2: succesful ? `You create a new timer!` : `The ${element.name} was not created. Something happened :(`
+      })
+    })
+  }
 
   const handleStart = (e) => {}
 
@@ -69,7 +86,9 @@ export default function TimerScreen() {
 
   const optionsCreateAndModifySection = (
     <Text styles={styles.optionsSection}>
-      <Button title="SAVE" color="#202020" touchSoundDisabled={false} onPress={handleSave}></Button>
+      <Button title="SAVE" color="#dd34ee" onPress={() => {
+        setAddDialogVisible(true);
+      }}/>
       <Button title="START" color="#20ee40" onPress={handleStart}></Button>
     </Text>
   )
@@ -113,8 +132,8 @@ export default function TimerScreen() {
           timerSettings.SETS.step,
           buttonDefaultTextSize,
           inputSpinnerDefaultColor,
-          (num) => handleChange(num, reps, setReps),
-          reps
+          (num) => handleChange(num, sets, setSets),
+          sets
         )
       }
       {
@@ -145,19 +164,31 @@ export default function TimerScreen() {
     </View>
   );
 
-  const generateTimerTimingComponent = (
+  const savePrompt = (
+    <Prompt
+      title="Enter the timer name"
+      inputPlaceholder="timer1"
+      isVisible={addDialogVisible}
+      onChangeText={(text) => setName(text)}
+      onCancel={() => { setName(''); setAddDialogVisible(false)}}
+      onSubmit={() => { handleSave({rest, sets, work, totalTime, name}); setAddDialogVisible(false)}}
+    />
+  );
+
+  const generateTimerTimingComponent = (  
     <View style={styles.container}>
       { showTimer(totalTime, styles.total) }
       { optionsTimingSection }
+      <Toast />
     </View>
   );
 
   return (
     <>
-    {mode === MODES.CREATE ? generateTimerCreateAndModifyComponent : generateTimerTimingComponent}
-    {<Button onPress={() => mode === MODES.CREATE ? setMode(MODES.TIMER) : setMode(MODES.CREATE)} title="Change"></Button>}
+      {mode === MODES.CREATE ? generateTimerCreateAndModifyComponent : generateTimerTimingComponent}
+      <Button onPress={() => mode === MODES.CREATE ? setMode(MODES.TIMER) : setMode(MODES.CREATE)} title="Change"></Button>
+      {savePrompt}
     </>
-    
   );
 }
 

@@ -775,12 +775,19 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.16.7"
 
-"@babel/plugin-transform-react-display-name@^7.0.0":
+"@babel/plugin-transform-react-display-name@^7.0.0", "@babel/plugin-transform-react-display-name@^7.16.7":
   version "7.16.7"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-display-name/-/plugin-transform-react-display-name-7.16.7.tgz#7b6d40d232f4c0f550ea348593db3b21e2404340"
   integrity sha512-qgIg8BcZgd0G/Cz916D5+9kqX0c7nPZyXaP8R2tLNN5tkyIZdG5fEwBrxwplzSnjC1jvQmyMNVwUCZPcbGY7Pg==
   dependencies:
     "@babel/helper-plugin-utils" "^7.16.7"
+
+"@babel/plugin-transform-react-jsx-development@^7.16.7":
+  version "7.16.7"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-jsx-development/-/plugin-transform-react-jsx-development-7.16.7.tgz#43a00724a3ed2557ed3f276a01a929e6686ac7b8"
+  integrity sha512-RMvQWvpla+xy6MlBpPlrKZCMRs2AGiHOGHY3xRwl0pEeim348dDyxeH4xBsMPbIMhujeq7ihE702eM2Ew0Wo+A==
+  dependencies:
+    "@babel/plugin-transform-react-jsx" "^7.16.7"
 
 "@babel/plugin-transform-react-jsx-self@^7.0.0":
   version "7.16.7"
@@ -796,7 +803,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.16.7"
 
-"@babel/plugin-transform-react-jsx@^7.0.0", "@babel/plugin-transform-react-jsx@^7.12.17":
+"@babel/plugin-transform-react-jsx@^7.0.0", "@babel/plugin-transform-react-jsx@^7.12.17", "@babel/plugin-transform-react-jsx@^7.16.7":
   version "7.17.3"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-jsx/-/plugin-transform-react-jsx-7.17.3.tgz#eac1565da176ccb1a715dae0b4609858808008c1"
   integrity sha512-9tjBm4O07f7mzKSIlEmPdiE6ub7kfIe6Cd+w+oQebpATfTQMAgW+YOuWxogbKVTulA+MEO7byMeIUtQ1z+z+ZQ==
@@ -806,6 +813,14 @@
     "@babel/helper-plugin-utils" "^7.16.7"
     "@babel/plugin-syntax-jsx" "^7.16.7"
     "@babel/types" "^7.17.0"
+
+"@babel/plugin-transform-react-pure-annotations@^7.16.7":
+  version "7.16.7"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-pure-annotations/-/plugin-transform-react-pure-annotations-7.16.7.tgz#232bfd2f12eb551d6d7d01d13fe3f86b45eb9c67"
+  integrity sha512-hs71ToC97k3QWxswh2ElzMFABXHvGiJ01IB1TbYQDGeWRKWz/MPUTh5jGExdHvosYKpnJW5Pm3S4+TA3FyX+GA==
+  dependencies:
+    "@babel/helper-annotate-as-pure" "^7.16.7"
+    "@babel/helper-plugin-utils" "^7.16.7"
 
 "@babel/plugin-transform-regenerator@^7.0.0", "@babel/plugin-transform-regenerator@^7.16.7":
   version "7.16.7"
@@ -992,6 +1007,18 @@
     "@babel/plugin-transform-dotall-regex" "^7.4.4"
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
+
+"@babel/preset-react@^7.16.7":
+  version "7.16.7"
+  resolved "https://registry.yarnpkg.com/@babel/preset-react/-/preset-react-7.16.7.tgz#4c18150491edc69c183ff818f9f2aecbe5d93852"
+  integrity sha512-fWpyI8UM/HE6DfPBzD8LnhQ/OcH8AgTaqcqP2nGOXEUV+VKBR5JRN9hCk9ai+zQQ57vtm9oWeXguBCPNUjytgA==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.16.7"
+    "@babel/helper-validator-option" "^7.16.7"
+    "@babel/plugin-transform-react-display-name" "^7.16.7"
+    "@babel/plugin-transform-react-jsx" "^7.16.7"
+    "@babel/plugin-transform-react-jsx-development" "^7.16.7"
+    "@babel/plugin-transform-react-pure-annotations" "^7.16.7"
 
 "@babel/preset-typescript@^7.1.0":
   version "7.16.7"
@@ -1295,6 +1322,11 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@powerdesigninc/react-native-prompt@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@powerdesigninc/react-native-prompt/-/react-native-prompt-0.1.2.tgz#e1fff5fddef6c6592337a7655ee505fabe711333"
+  integrity sha512-AmdG7/PAsZNGqh3ZZukVN/o84XVTYPvGmz0kUPT2ftlYsKiX6iResu9tgHt7Swvfs9QY3ADlNc4+BqztpwJIyw==
 
 "@react-native-community/cli-debugger-ui@^5.0.1":
   version "5.0.1"
@@ -1731,6 +1763,13 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
+
+axios@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.26.1.tgz#1ede41c51fcf51bbbd6fd43669caaa4f0495aaa9"
+  integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
+  dependencies:
+    follow-redirects "^1.14.8"
 
 babel-core@^7.0.0-bridge.0:
   version "7.0.0-bridge.0"
@@ -2815,6 +2854,11 @@ flow-parser@^0.121.0:
   version "0.121.0"
   resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.121.0.tgz#9f9898eaec91a9f7c323e9e992d81ab5c58e618f"
   integrity sha512-1gIBiWJNR0tKUNv8gZuk7l9rVX06OuLzY9AoGio7y/JT4V1IZErEMEq2TJS+PFcw/y0RshZ1J/27VfK1UQzYVg==
+
+follow-redirects@^1.14.8:
+  version "1.14.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.9.tgz#dd4ea157de7bfaf9ea9b3fbd85aa16951f78d8d7"
+  integrity sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==
 
 fontfaceobserver@^2.1.0:
   version "2.1.0"
@@ -4539,6 +4583,11 @@ react-native-codegen@^0.0.6:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
+react-native-dialog@^9.2.1:
+  version "9.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-dialog/-/react-native-dialog-9.2.1.tgz#21e12c8bf70df390963c1c4e697ce8d16055d4a4"
+  integrity sha512-UNnGFTpH0cX16cJZLFq9/TAZH1+B2vzJrQL1mUaSqZjV+sFTpUB1WvghJZxPwi52v587kJpfKN7oPfWaXAu+YQ==
+
 react-native-gesture-handler@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.3.2.tgz#65ce3b145bd96242c2200abbb9730c94bc73386c"
@@ -4576,6 +4625,11 @@ react-native-paper@^4.12.0:
     color "^3.1.2"
     react-native-iphone-x-helper "^1.3.1"
 
+react-native-prompt-crossplatform@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-prompt-crossplatform/-/react-native-prompt-crossplatform-1.6.1.tgz#0186c7de473fcbc00a50b6b1f599fb2193d880a7"
+  integrity sha1-AYbH3kc/y8AKULax9Zn7IZPYgKc=
+
 react-native-reanimated@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.6.0.tgz#500497339bec2d18fd4979dc07c831997c9aee82"
@@ -4608,6 +4662,11 @@ react-native-screens@^3.11.1, react-native-screens@^3.13.1:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-toast-message@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.1.5.tgz#550acb9c6c0f1ee49c6b57b65a56d34e297eb723"
+  integrity sha512-mk3rELtBEhrhWBCN6CTaw0gypgL9ZNauX3xx1LUs4uee9vc0pVsghrKxO57vroUCcNL2hDeZSLJWdQNMCkGeaQ==
 
 react-native-vector-icons@^9.1.0:
   version "9.1.0"

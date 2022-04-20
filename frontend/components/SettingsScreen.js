@@ -1,61 +1,10 @@
 import * as React from "react";
+import Toast from 'react-native-toast-message';
 import { Text, View, Button, StyleSheet, ScrollView } from "react-native";
 import { List, Colors } from "react-native-paper";
 import { TimerContext } from "../memo/TimerMemo";
-import { TimerStore } from "../store/timerStore";
+import { TimerStore } from "../store/TimerStore";
 import { showTimer } from "../utils";
-
-const dummySettings = [
-  {
-    work: 1,
-    rest: 1,
-    sets: 1,
-    totalTime: 10,
-    name: "Timer 1",
-  },
-  {
-    work: 1,
-    rest: 1,
-    sets: 1,
-    totalTime: 10,
-    name: "Timer 2",
-  },
-  {
-    work: 1,
-    rest: 1,
-    sets: 1,
-    totalTime: 10,
-    name: "Timer 3",
-  },
-  {
-    work: 1,
-    rest: 1,
-    sets: 1,
-    totalTime: 10,
-    name: "Timer 4",
-  },
-  {
-    work: 1,
-    rest: 1,
-    sets: 1,
-    totalTime: 10,
-    name: "Timer 5",
-  },
-  {
-    work: 1,
-    rest: 1,
-    sets: 1,
-    totalTime: 10,
-    name: "Timer 6",
-  },
-  {
-    work: 1,
-    rest: 1,
-    sets: 1,
-    totalTime: 10,
-    name: "Timer 7",
-  },
-];
 
 export default function SettingsScreen() {
 
@@ -72,8 +21,17 @@ export default function SettingsScreen() {
   }, [settings]);
 
   const handleDelete = (setting) => {
-    // TODO: DELETE
-    setSettings(settings.filter(set => set !== setting))
+    TimerStore.delete(timerContext, {name : setting.name}).then(({data}) => {
+      console.log(data)
+      const succesful = data.affectedRows && data.affectedRows > 0;
+      const element = setting;
+      Toast.show({
+        type: succesful ? 'success' : 'error',
+        text1: 'Action message :D',
+        text2: succesful ? `You have deleted the ${element.name} timer` : `The ${element.name} was not deleted. Something happened :(`
+      })
+      setSettings([]);
+    })
   };
 
   const handleModify = (setting) => {
@@ -144,11 +102,22 @@ export default function SettingsScreen() {
 
   return (
     <View styles={styles.mainContainer}>
-      <ScrollView>
+      {
+        settings && settings !== [] 
+        ?
+        <ScrollView>
         {settings.map((setting, index) =>
           generateItemComponent(setting, index)
         )}
-      </ScrollView>
+        </ScrollView> 
+        :
+        <List.Item
+          style={styles.item}
+          title="There's no timers at the moment"
+          description="Try adding a new one from the timer section"
+        />
+      }
+      <Toast />
     </View>
   );
 }
@@ -180,4 +149,8 @@ const styles = StyleSheet.create({
   total: {
     fontSize: 15,
   },
+  emptyMessage : {
+    fontSize : 25,
+    color : '#000',
+  }
 });
