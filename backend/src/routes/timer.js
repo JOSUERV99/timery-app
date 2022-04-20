@@ -5,7 +5,7 @@ const router = express.Router();
 
 const MAIN_TABLE = process.env.MYSQL_MAIN_TABLE;
 
-router.get('/', async (_, res) => {
+router.get('/get', async (_, res) => {
   try {
     const result = await query(`SELECT creationDate, rest, work, sets, totalTime, name FROM ${MAIN_TABLE}`);
     res.json({result});

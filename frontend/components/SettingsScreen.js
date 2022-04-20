@@ -2,6 +2,7 @@ import * as React from "react";
 import { Text, View, Button, StyleSheet, ScrollView } from "react-native";
 import { List, Colors } from "react-native-paper";
 import { TimerContext } from "../memo/TimerMemo";
+import { TimerStore } from "../store/timerStore";
 import { showTimer } from "../utils";
 
 const dummySettings = [
@@ -60,8 +61,15 @@ export default function SettingsScreen() {
 
   const timerContext = React.useContext(TimerContext);
 
-  const [settings, setSettings] = React.useState(dummySettings);
+  const [settings, setSettings] = React.useState([]);
   const [selected, setSelected] = React.useState(null);
+
+  React.useState(() => {
+    TimerStore.get(timerContext).then(({data}) => {
+      console.log(data.result);
+      setSettings(data?.result || []);
+    }).catch(console.error);
+  }, [settings]);
 
   const handleDelete = (setting) => {
     // TODO: DELETE

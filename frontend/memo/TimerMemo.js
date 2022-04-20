@@ -4,7 +4,7 @@ const TimerContext = React.createContext();
 
 const TimerContextProvider = (props) => {
 
-    const [ baseUrl, setBaseUrl ] = React.useState('localhost');
+    const [ baseUrl, setBaseUrl ] = React.useState('http://localhost:3000');
     const [ apiKey, setApiKey ] = React.useState('');
 
     const value = React.useMemo(() => ({
