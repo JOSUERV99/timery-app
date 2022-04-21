@@ -7,7 +7,6 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { calculateTotalTime, showTimer } from "../utils";
 import { TimerContext } from "../memo/TimerMemo";
 import { TimerStore } from "../store/TimerStore";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const timerSettings = {
   SETS: {
@@ -33,7 +32,7 @@ const timerSettings = {
   },
 };
 
-const MODES = {
+export const MODES = {
   TIMER : 0,
   CREATE : 1,
   UPDATE : 2
@@ -52,9 +51,19 @@ export default function TimerScreen() {
   const [rest, setRest] = React.useState(timerSettings.REST.sample);
   const [work, setWork] = React.useState(timerSettings.WORK.sample);
 
-  const [totalTime, setTotalTime] = React.useState(0);
+  const [totalTime, setTotalTime] = React.useState(calculateTotalTime(work, sets, rest));
   const [name, setName] = React.useState('');
   const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    console.log(totalTime)
+    setInterval(() => {
+      if (MODES.TIMER === mode) {
+        setTotalTime(totalTime - 1);
+      }
+    }, 1000);
+  }, [totalTime])
+ 
 
   React.useEffect(() => {
     setTotalTime(calculateTotalTime(work, sets, rest));
@@ -66,37 +75,81 @@ export default function TimerScreen() {
   };
 
   const handleSave = (timer) => {
-    TimerStore.create(timerContext, timer).then(({data}) => {
-      console.log(data);
-      const element = timer;
-      const succesful = data.affectedRows && data.affectedRows > 0;
-      Toast.show({
-        type: succesful ? 'success' : 'error',
-        text1: 'Action message :D',
-        text2: succesful ? `You create a new timer!` : `The ${element.name} was not created. Something happened :(`
+    if (mode === MODES.CREATE)
+    {
+      TimerStore.create(timerContext, timer).then(({data}) => {
+        console.log('Creating ', data);
+        const element = timer;
+        const succesful = data.affectedRows && data.affectedRows > 0;
+        Toast.show({
+          type: succesful ? 'success' : 'error',
+          text1: 'Action message :D',
+          text2: succesful ? `You create a new timer!` : `The ${element.name} was not created. Something happened :(`
+        })
       })
-    })
+    }
+    else if (mode === MODES.UPDATE) 
+    {
+      TimerStore.modify(timerContext, timer).then(({data}) => {
+        console.log('Updating ', data);
+        const element = timer;
+        const succesful = data.affectedRows && data.affectedRows > 0;
+        Toast.show({
+          type: succesful ? 'success' : 'error',
+          text1: 'Action message :D',
+          text2: succesful ? `You update the ${element.name} timer!` : `The ${element.name} was not updated. Something happened :(`
+        })
+      })
+    }
+    
   }
 
-  const handleStart = (e) => {}
+  const handleStart = (e) => {
+    setMode(MODES.TIMER);
+    console.log(mode);
+  }
 
-  const handleStop = (e) => {}
+  const handleStop = (e) => {
+    setMode(MODES.CREATE);
+  }
 
   const handleRestart = (e) => {}
 
+  const handleUpdate = (setting) => {
+    TimerStore.modify(timerContext, setting).then(({data}) => {
+
+      const succesful = data.affectedRows && data.affectedRows > 0;
+      const element = setting;
+        Toast.show({
+          type: succesful ? 'success' : 'error',
+          text1: 'Action message :D',
+          text2: succesful ? `You have updated the ${element.name} timer` : `The ${element.name} was not deleted. Something happened :(`
+        })
+
+      timerContext.setMode(MODES.CREATE);
+      timerContext.setSelected(null);
+
+    }).catch(console.error);
+  }
+
   const optionsCreateAndModifySection = (
     <Text styles={styles.optionsSection}>
-      <Button title="SAVE" color="#dd34ee" onPress={() => {
-        setAddDialogVisible(true);
+      <Button title="CREATE" color="#dd34ee" onPress={() => {
+          setMode(MODES.CREATE);
+          setAddDialogVisible(true);
       }}/>
-      <Button title="START" color="#20ee40" onPress={handleStart}></Button>
+      <Button title="UPDATE" color="#2211ff" onPress={() => {
+        setMode(MODES.UPDATE);
+          setAddDialogVisible(true);
+      }}/>
+      <Button title="START" color="#20ee40" onPress={() => handleStart()}></Button>
     </Text>
   )
 
   const optionsTimingSection = (
     <Text styles={styles.optionsSection}>
       <Button title="RESTART" color="#202020" touchSoundDisabled={false} onPress={handleRestart}></Button>
-      <Button title="STOP" color="#20ee40" onPress={handleStart}></Button>
+      <Button title="STOP" color="#20ee40" onPress={handleStop}></Button>
     </Text>
   )
 
@@ -164,6 +217,51 @@ export default function TimerScreen() {
     </View>
   );
 
+  const generateTimerModify = () => (
+    <View style={styles.container}>
+      <Text>WORKOUT TIME</Text>
+      { showTimer(totalTime, styles.total) }
+      {
+        generateInputSpinner(
+          "SETS",
+          timerSettings.SETS.maxAmount,
+          timerSettings.SETS.minAmount,
+          timerSettings.SETS.step,
+          buttonDefaultTextSize,
+          inputSpinnerDefaultColor,
+          (num) => handleChange(num, timerContext.selected.sets, timerContext.selected.setSets),
+          timerContext.selected.sets
+        )
+      }
+      {
+        generateInputSpinner(
+          "REST",
+          timerSettings.REST.maxAmount,
+          timerSettings.REST.minAmount,
+          timerSettings.REST.step,
+          buttonDefaultTextSize,
+          inputSpinnerDefaultColor,
+          (num) => handleChange(num, timerContext.selected.rest, timerContext.selected.setRest),
+          timerContext.selected.rest
+        )
+      }
+      {
+        generateInputSpinner(
+          "WORK",
+          timerSettings.WORK.maxAmount,
+          timerSettings.WORK.minAmount,
+          timerSettings.WORK.step,
+          buttonDefaultTextSize,
+          inputSpinnerDefaultColor,
+          (num) => handleChange(num, timerContext.selected.work, timerContext.selected.setWork),
+          timerContext.selected.work
+        )
+      }
+      { optionsCreateAndModifySection }
+    </View>
+  );
+
+
   const savePrompt = (
     <Prompt
       title="Enter the timer name"
@@ -179,15 +277,18 @@ export default function TimerScreen() {
     <View style={styles.container}>
       { showTimer(totalTime, styles.total) }
       { optionsTimingSection }
-      <Toast />
+
     </View>
   );
 
   return (
     <>
-      {mode === MODES.CREATE ? generateTimerCreateAndModifyComponent : generateTimerTimingComponent}
+      {
+        mode === MODES.CREATE ? generateTimerCreateAndModifyComponent 
+        : generateTimerTimingComponent}
       <Button onPress={() => mode === MODES.CREATE ? setMode(MODES.TIMER) : setMode(MODES.CREATE)} title="Change"></Button>
       {savePrompt}
+      <Toast />
     </>
   );
 }

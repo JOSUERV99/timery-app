@@ -29,7 +29,7 @@ router.post('/create', async (req, res) => {
 
 router.put('/modify', async (req, res) => {
   try {
-    const updatedElement = req.body.timer;
+    const updatedElement = req.body.data.timer;
     const result = await query(
       `UPDATE ${MAIN_TABLE} 
        SET sets = ${updatedElement.sets},

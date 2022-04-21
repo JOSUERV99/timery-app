@@ -5,19 +5,22 @@ import { List, Colors } from "react-native-paper";
 import { TimerContext } from "../memo/TimerMemo";
 import { TimerStore } from "../store/TimerStore";
 import { showTimer } from "../utils";
+import { MODES } from "./TimerScreen";
 
 export default function SettingsScreen() {
 
   const timerContext = React.useContext(TimerContext);
 
   const [settings, setSettings] = React.useState([]);
-  const [selected, setSelected] = React.useState(null);
 
-  React.useState(() => {
+  const refresh = () => {
     TimerStore.get(timerContext).then(({data}) => {
-      console.log(data.result);
       setSettings(data?.result || []);
     }).catch(console.error);
+  }
+
+  React.useState(() => {
+    refresh();
   }, [settings]);
 
   const handleDelete = (setting) => {
@@ -30,13 +33,15 @@ export default function SettingsScreen() {
         text1: 'Action message :D',
         text2: succesful ? `You have deleted the ${element.name} timer` : `The ${element.name} was not deleted. Something happened :(`
       })
-      setSettings([]);
+      refresh();
     })
   };
 
   const handleModify = (setting) => {
     // TODO: CALL MODIFY IN ANOTHER SECTION MENU
-    setSelected(setting)
+    timerContext.setSelected(setting)
+    timerContext.setMode(MODES.UPDATE);
+    refresh();
   };
 
   const descriptionSection = (setting, key) => (
@@ -54,23 +59,12 @@ export default function SettingsScreen() {
   const rightItemSection = (setting) => (
     <Text style={styles.optionsSection}>
       <Button
-        color="#000"
-        style={styles.optionButton}
-        title="MODIFY"
-        icon="camera"
-        mode="contained"
-        onPress={() => handleModify(setting)}
-      >
-        Press me
-      </Button>
-      <Button
         color="#990c03"
         title="DELETE"
         icon="camera"
         mode="contained"
         onPress={() => handleDelete(setting)}
       >
-        Press me
       </Button>
     </Text>
   );
@@ -102,6 +96,7 @@ export default function SettingsScreen() {
 
   return (
     <View styles={styles.mainContainer}>
+      <Button onPress={() => refresh()} title="Refrescar"></Button>
       {
         settings && settings !== [] 
         ?
