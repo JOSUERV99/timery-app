@@ -3,9 +3,9 @@ A multi-functional timer app that track config and count time for whatever you w
 
 ## Screenshots
 <span>
-<img alt="Timer section" src="https://github.com/JOSUERV99/timery-app/blob/main/_ss/timer-section.jpg?raw=true" width="300" height="520"/>
-<img alt="Clock section" src="https://github.com/JOSUERV99/timery-app/blob/main/_ss/clock-section.jpg?raw=true" width="300" height="520"/>
-<img alt="Settings section" src="https://github.com/JOSUERV99/timery-app/blob/main/_ss/settings-section.jpg?raw=true" width="300" height="520"/>
+<img alt="Timer section" src="https://github.com/JOSUERV99/timery-app/blob/main/_ss/timer-section.jpg?raw=true" width="230" height="410"/>
+<img alt="Clock section" src="https://github.com/JOSUERV99/timery-app/blob/main/_ss/clock-section.jpg?raw=true" width="230" height="410"/>
+<img alt="Settings section" src="https://github.com/JOSUERV99/timery-app/blob/main/_ss/settings-section.jpg?raw=true" width="230" height="410"/>
 </span>
 
 ## Technologies:
